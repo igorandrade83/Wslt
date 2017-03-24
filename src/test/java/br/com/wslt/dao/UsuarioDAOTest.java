@@ -80,5 +80,5 @@ public class UsuarioDAOTest<T> {
 			System.out.println("Registro editado.");
 		}
 	}
-	
+
 }

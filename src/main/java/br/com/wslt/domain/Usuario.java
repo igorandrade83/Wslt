@@ -27,7 +27,6 @@ public class Usuario implements Serializable {
 	@Column(length=15, nullable = false)
 	private String usrtwitSn;
 	
-	
 	public int getUsrId() {
 		return usrId;
 	}

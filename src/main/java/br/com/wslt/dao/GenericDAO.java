@@ -101,4 +101,23 @@ public class GenericDAO<T> {
 			session.close();
 		}
 	}
+	
+	public void merge(T t){
+		Session session = HibernateUtil.getFabricaDeSessoes().openSession();
+		Transaction transaction = null;
+		
+		try{
+			transaction = session.beginTransaction();
+			session.merge(t);
+			transaction.commit();
+		}catch (RuntimeException erro) {
+			if (transaction != null){
+				transaction.rollback();
+			}
+			throw erro;
+		}finally {
+			session.close();
+		}
+	}
+
 }

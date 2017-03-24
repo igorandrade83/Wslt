@@ -1,0 +1,10 @@
+br\com\wslt\domain\Usuario.class
+br\com\wslt\util\WsltResourceConfig.class
+br\com\wslt\dao\UsuarioDAO.class
+br\com\wslt\dao\HistoricoDAO.class
+br\com\wslt\service\WsltService.class
+br\com\wslt\service\WsltServiceUser.class
+br\com\wslt\domain\Historico.class
+br\com\wslt\util\HibernateUtil.class
+br\com\wslt\dao\GenericDAO.class
+br\com\wslt\bean\UsuarioBean.class

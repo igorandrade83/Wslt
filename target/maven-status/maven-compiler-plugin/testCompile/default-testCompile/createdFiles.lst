@@ -1,0 +1,3 @@
+br\com\wslt\dao\UsuarioDAOTest.class
+br\com\wslt\util\HibernateUtilTest.class
+br\com\wslt\dao\HistoricoDAOTest.class
