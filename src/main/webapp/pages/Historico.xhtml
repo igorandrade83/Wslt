@@ -14,9 +14,13 @@
 		<p:panel id="painelLIsta" header="Listagem do histórico dos Artistas">
 			<f:facet name="header">
 				<p:outputLabel value="Data inicio: " />
-				<p:calendar id="calendarioInicio" size="15" />
+				<p:calendar id="dataInicio"  value="#{historicoBean.dataInicio}" size="15" />
 				<p:outputLabel value="Data fim: " />
-				<p:calendar id="calendarioFim" size="15" />
+				<p:calendar id="dataFim" value="#{historicoBean.dataFim}" size="15" />
+				<p:commandButton value="Pesquisar"
+					actionListener="#{historicoBean.listarComData}"
+					update=":formLista:painelLIsta">
+				</p:commandButton>
 			</f:facet>
 			<p:dataTable emptyMessage="Nenhum registro encontrado."
 				paginator="true" value="#{historicoBean.historicos}" var="historico" rows="10">

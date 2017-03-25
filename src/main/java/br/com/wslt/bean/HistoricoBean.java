@@ -1,6 +1,7 @@
 package br.com.wslt.bean;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -23,6 +24,24 @@ public class HistoricoBean implements Serializable {
 	private List<Historico> historicos;
 	private Usuario usuario;
 	private Historico historico;
+	private Date dataInicio = null;
+	private Date dataFim = null;
+	
+	public Date getDataInicio() {
+		return dataInicio;
+	}
+
+	public void setDataInicio(Date dataInicio) {
+		this.dataInicio = dataInicio;
+	}
+
+	public Date getDataFim() {
+		return dataFim;
+	}
+
+	public void setDataFim(Date dataFim) {
+		this.dataFim = dataFim;
+	}
 
 	public List<Historico> getHistoricos() {
 		return historicos;
@@ -47,13 +66,33 @@ public class HistoricoBean implements Serializable {
 	public void setHistorico(Historico historico) {
 		this.historico = historico;
 	}
-	
+
 	@PostConstruct
 	public void listar() {
 		try {
 			HistoricoDAO historicoDAO = new HistoricoDAO();
-			historicos  = historicoDAO.Listar();
-			System.out.println("teste");
+			historicos = historicoDAO.Listar();
+
+		} catch (RuntimeException erro) {
+			String msg = "Erro ao tentar Listar!";
+			FacesMessage mensagem = new FacesMessage(FacesMessage.SEVERITY_INFO, msg, msg);
+			FacesContext contexto = FacesContext.getCurrentInstance();
+			contexto.addMessage(null, mensagem);
+			erro.printStackTrace();
+		}
+	}
+
+	public void listarComData() {
+		try {
+			if (dataInicio != null && dataFim != null) {
+				HistoricoDAO historicoDAO = new HistoricoDAO();
+				historicos = historicoDAO.ListarComDatas(dataInicio, dataFim);
+			} else {
+				String msg = "Preencha todos os campos!";
+				FacesMessage mensagem = new FacesMessage(FacesMessage.SEVERITY_INFO, msg, msg);
+				FacesContext contexto = FacesContext.getCurrentInstance();
+				contexto.addMessage(null, mensagem);
+			}
 		} catch (RuntimeException erro) {
 			String msg = "Erro ao tentar Listar!";
 			FacesMessage mensagem = new FacesMessage(FacesMessage.SEVERITY_INFO, msg, msg);
@@ -75,8 +114,7 @@ public class HistoricoBean implements Serializable {
 			// Limpa atributo usuario;
 			instancia();
 			HistoricoDAO historicoDAO = new HistoricoDAO();
-			historicos  = historicoDAO.Listar();
-			
+			historicos = historicoDAO.Listar();
 
 			String msg = "Mensagem enviada com sucesso!";
 			FacesMessage mensagem = new FacesMessage(FacesMessage.SEVERITY_INFO, msg, msg);
