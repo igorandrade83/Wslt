@@ -14,7 +14,6 @@ import com.google.gson.Gson;
 import br.com.wslt.dao.HistoricoDAO;
 import br.com.wslt.dao.UsuarioDAO;
 import br.com.wslt.domain.Historico;
-import br.com.wslt.domain.Usuario;
 
 // http://localhost:8080/Wslt/service/wslt
 

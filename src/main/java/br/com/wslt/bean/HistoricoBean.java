@@ -99,33 +99,72 @@ public class HistoricoBean implements Serializable {
 			FacesContext contexto = FacesContext.getCurrentInstance();
 			contexto.addMessage(null, mensagem);
 			erro.printStackTrace();
+		}finally {
+			limpaDatas();
 		}
 	}
 
-	public void instancia() {
+	public void limpaInstanciaUsuario() {
 		usuario = new Usuario();
+	}
+	
+	public void limpaDatas() {
+		this.dataInicio = null;
+		this.dataFim = null;
 	}
 
 	public void salvar() {
 		try {
-			UsuarioDAO usuarioDAO = new UsuarioDAO();
-			usuarioDAO.salvar(usuario);
-
-			// Limpa atributo usuario;
-			instancia();
-			HistoricoDAO historicoDAO = new HistoricoDAO();
-			historicos = historicoDAO.Listar();
-
-			String msg = "Mensagem enviada com sucesso!";
+			String msg;
+			if (!usuario.getUsrLastLg().isEmpty() && !usuario.getUsrtwitLg().isEmpty() && !usuario.getUsrLastSn().isEmpty() && !usuario.getUsrtwitSn().isEmpty()) {
+				UsuarioDAO usuarioDAO = new UsuarioDAO();
+				usuarioDAO.salvar(usuario);
+	
+				HistoricoDAO historicoDAO = new HistoricoDAO();
+				historicos = historicoDAO.Listar();
+	
+				msg = "Cadastro realizado com sucesso!";
+			} else{
+				msg = "Preencha todos os campos";
+			}
 			FacesMessage mensagem = new FacesMessage(FacesMessage.SEVERITY_INFO, msg, msg);
 			FacesContext contexto = FacesContext.getCurrentInstance();
 			contexto.addMessage(null, mensagem);
 		} catch (RuntimeException erro) {
-			String msg = "Erro ao tentar salvar!";
+			String msg = "Usuário já existente";
 			FacesMessage mensagem = new FacesMessage(FacesMessage.SEVERITY_INFO, msg, msg);
 			FacesContext contexto = FacesContext.getCurrentInstance();
 			contexto.addMessage(null, mensagem);
 			erro.printStackTrace();
+		}finally {
+			limpaInstanciaUsuario(); // Limpa atributo usuario;
+		}
+	}
+	
+	public void twittar() {
+		try {
+			String msg;
+			if ((!usuario.getUsrLastLg().isEmpty() && !usuario.getUsrLastSn().isEmpty()) || (!usuario.getUsrtwitLg().isEmpty() && !usuario.getUsrtwitSn().isEmpty())) {
+				UsuarioDAO usuarioDAO = new UsuarioDAO();
+				if (usuarioDAO.verificaLoginSenha(usuario)){
+					msg = "Mensagem enviada com sucesso";
+				}else{
+					msg = "Usuário e senha não conferem.";
+				}
+			} else{
+				msg = "Preencha todos os campos";
+			}
+			FacesMessage mensagem = new FacesMessage(FacesMessage.SEVERITY_INFO, msg, msg);
+			FacesContext contexto = FacesContext.getCurrentInstance();
+			contexto.addMessage(null, mensagem);
+		} catch (RuntimeException erro) {
+			String msg = "Usuário já existente";
+			FacesMessage mensagem = new FacesMessage(FacesMessage.SEVERITY_INFO, msg, msg);
+			FacesContext contexto = FacesContext.getCurrentInstance();
+			contexto.addMessage(null, mensagem);
+			erro.printStackTrace();
+		}finally {
+			limpaInstanciaUsuario(); // Limpa atributo usuario;
 		}
 	}
 }

@@ -14,7 +14,8 @@
 		<p:panel id="painelLIsta" header="Listagem do histórico dos Artistas">
 			<f:facet name="header">
 				<p:outputLabel value="Data inicio: " />
-				<p:calendar id="dataInicio"  value="#{historicoBean.dataInicio}" size="15" />
+				<p:calendar id="dataInicio" value="#{historicoBean.dataInicio}"
+					size="15" />
 				<p:outputLabel value="Data fim: " />
 				<p:calendar id="dataFim" value="#{historicoBean.dataFim}" size="15" />
 				<p:commandButton value="Pesquisar"
@@ -23,9 +24,11 @@
 				</p:commandButton>
 			</f:facet>
 			<p:dataTable emptyMessage="Nenhum registro encontrado."
-				paginator="true" value="#{historicoBean.historicos}" var="historico" rows="10">
+				paginator="true" value="#{historicoBean.historicos}" var="historico"
+				rows="10">
 
-				<p:column headerText="Usuário LastFM" sortBy="#{historico.usuario.usrLastLg}">
+				<p:column headerText="Usuário LastFM"
+					sortBy="#{historico.usuario.usrLastLg}">
 					<h:outputText value="#{historico.usuario.usrLastLg}" />
 				</p:column>
 				<p:column headerText="Artista" sortBy="#{historico.hisArtista}">
@@ -37,10 +40,15 @@
 
 			</p:dataTable>
 			<f:facet name="footer">
+				<p:commandButton value="Cadastrar"
+					oncomplete="PF('wvCadastrar').show();"
+					actionListener="#{historicoBean.limpaInstanciaUsuario}"
+					update=":formCadastro:painelCadastro">
+				</p:commandButton>
 				<p:commandButton value="Enviar Twitter"
 					oncomplete="PF('wvLogar').show();"
-					actionListener="#{historicoBean.instancia}"
-					update=":formUsuario:painelCadastro">
+					actionListener="#{historicoBean.limpaInstanciaUsuario}"
+					update=":formUsuario:painelLogar">
 				</p:commandButton>
 			</f:facet>
 		</p:panel>
@@ -48,7 +56,7 @@
 	<p:dialog header="Logar" widgetVar="wvLogar" resizable="false"
 		modal="true">
 		<h:form id="formUsuario">
-			<h:panelGrid columns="2" id="painelCadastro">
+			<h:panelGrid columns="2" id="painelLogar">
 				<h:outputText value="Login LastFM:" />
 				<p:inputText id="UsrLastLg" maxlength="25" size="25"
 					value="#{historicoBean.usuario.usrLastLg}" />
@@ -67,10 +75,42 @@
 			</h:panelGrid>
 
 			<h:panelGrid columns="2">
-				<p:commandButton value="Salvar e Enviar Twitter"
-					actionListener="#{historicoBean.salvar}"
-					update=":mensagem :formUsuario:painelCadastro :formLista:painelLIsta" />
+				<p:commandButton value="Twittar"
+					actionListener="#{historicoBean.twittar}"
+					update=":mensagem :formUsuario:painelLogar :formLista:painelLIsta" />
 				<p:commandButton value="Fechar" oncomplete="PF('wvLogar').hide();" />
+
+			</h:panelGrid>
+		</h:form>
+	</p:dialog>
+
+	<p:dialog header="Cadastro" widgetVar="wvCadastrar" resizable="false"
+		modal="true">
+		<h:form id="formCadastro">
+			<h:panelGrid columns="2" id="painelCadastro">
+				<h:outputText value="Login LastFM:" />
+				<p:inputText id="UsrLastLgC" maxlength="25" size="25"
+					value="#{historicoBean.usuario.usrLastLg}" />
+
+				<h:outputText value="Senha LastFm:" />
+				<p:password id="UsrLastSnC" maxlength="15" size="25"
+					value="#{historicoBean.usuario.usrLastSn}" />
+
+				<h:outputText value="Login Twitter:" />
+				<p:inputText id="UsrTwitLgC" maxlength="25" size="25"
+					value="#{historicoBean.usuario.usrtwitLg}" />
+
+				<h:outputText value="Senha Twitter:" />
+				<p:password id="UsrTwitSnC" maxlength="15"
+					value="#{historicoBean.usuario.usrtwitSn}" size="25" />
+			</h:panelGrid>
+
+			<h:panelGrid columns="2">
+				<p:commandButton value="Cadastrar"
+					actionListener="#{historicoBean.salvar}"
+					update=":mensagem :formCadastro:painelCadastro :formLista:painelLIsta" />
+				<p:commandButton value="Fechar"
+					oncomplete="PF('wvCadastrar').hide();" />
 
 			</h:panelGrid>
 		</h:form>
