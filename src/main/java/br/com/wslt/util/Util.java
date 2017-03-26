@@ -3,6 +3,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
+import java.util.TimeZone;
 
 public class Util {
 	
@@ -23,5 +24,13 @@ public class Util {
 		}finally {
 			return data;
 		}
+	}
+	
+	static public void ConvertUTC(){
+		final Date currentTime = new Date();
+		final SimpleDateFormat sdf = new SimpleDateFormat("EEE, MMM d, yyyy hh:mm:ss a z");
+		sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
+		System.out.println("UTC time: " + sdf.format(currentTime));
+		
 	}
 }

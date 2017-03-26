@@ -38,6 +38,15 @@ public class WsltServiceUser {
 		return gson.toJson(usuarioDAO.Buscar(usrID));
 	}
 
+	@GET
+	@Path("/last/{usrLastLg}")
+	public String buscarUsuarioLastFm(@PathParam("usrLastLg") String usrLastLg){		
+		UsuarioDAO usuarioDAO = new UsuarioDAO();
+		Gson gson = new Gson();
+
+		return gson.toJson(usuarioDAO.BuscarUsuarioLastFm(usrLastLg));
+	}
+	
 	// http://localhost:8080/Wslt/service/user
 	@POST
 	public String salvar(String json){

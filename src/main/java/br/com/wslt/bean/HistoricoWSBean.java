@@ -1,5 +1,6 @@
 package br.com.wslt.bean;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Date;
@@ -10,27 +11,20 @@ import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.Invocation;
-import javax.ws.rs.client.Invocation.Builder; 
 import javax.ws.rs.client.WebTarget;
-import javax.ws.rs.core.Form;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriBuilder;
-
-import org.glassfish.jersey.client.ClientResponse;
 import org.glassfish.jersey.filter.LoggingFilter;
+import org.primefaces.json.JSONException;
 import org.glassfish.jersey.client.ClientConfig;
 
 import com.google.gson.Gson;
 
-import br.com.wslt.dao.HistoricoDAO;
+import br.com.wslt.api.ApiLastFm;
 import br.com.wslt.dao.UsuarioDAO;
 import br.com.wslt.domain.Historico;
 import br.com.wslt.domain.Usuario;
@@ -148,9 +142,6 @@ public class HistoricoWSBean implements Serializable {
 		this.dataFim = null;
 	}
 	
-
-    //@Consumes(MediaType.APPLICATION_JSON)
-    //@Produces(MediaType.APPLICATION_JSON)
 	public void salvar() {
 		try {
 			String msg;
@@ -180,12 +171,15 @@ public class HistoricoWSBean implements Serializable {
 		}
 	}
 	
-	public void twittar() {
+	public void twittar() throws IOException, JSONException {
 		try {
 			String msg;
 			if ((!usuario.getUsrLastLg().isEmpty() && !usuario.getUsrLastSn().isEmpty()) || (!usuario.getUsrtwitLg().isEmpty() && !usuario.getUsrtwitSn().isEmpty())) {
 				UsuarioDAO usuarioDAO = new UsuarioDAO();
 				if (usuarioDAO.verificaLoginSenha(usuario)){
+					ApiLastFm apiLastFm = new ApiLastFm();
+					apiLastFm.RecebeListaApiLast(usuario.getUsrLastLg());
+					listar();
 					msg = "Mensagem enviada com sucesso";
 				}else{
 					msg = "Usuário e senha não conferem.";

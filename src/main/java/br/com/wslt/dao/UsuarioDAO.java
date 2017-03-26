@@ -58,5 +58,20 @@ public class UsuarioDAO extends GenericDAO<Usuario>{
 		}
 	}
 	
-	
+	public Usuario BuscarUsuarioLastFm(String usrLastLg){
+		try{
+			Session sessionL = HibernateUtil.getFabricaDeSessoes().openSession();
+			Criteria consultaLast = sessionL.createCriteria(Usuario.class);
+			consultaLast.add(Restrictions.like("usrLastLg", usrLastLg));
+			List<Usuario> usuariosLast = consultaLast.list();
+			sessionL.close();
+			if (usuariosLast.size() > 0){
+				return usuariosLast.get(0);
+			}else {
+				return null;
+			}
+		}catch (RuntimeException erro) {
+			throw erro;
+		}
+	}
 }
