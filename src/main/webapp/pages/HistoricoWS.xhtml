@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<title>Historico com WS</title>
+</h:head>
+<h:body>
+	<p:growl id="mensagem" />
+	<h:form id="formLista">
+		<p:panel id="painelLIsta" header="Listagem do histórico dos Artistas">
+			<f:facet name="header">
+				<p:outputLabel value="Data inicio: " />
+				<p:calendar id="dataInicio" value="#{historicoWSBean.dataInicio}"
+					size="15" />
+				<p:outputLabel value="Data fim: " />
+				<p:calendar id="dataFim" value="#{historicoWSBean.dataFim}"
+					size="15" />
+				<p:commandButton value="Pesquisar"
+					actionListener="#{historicoWSBean.listarComData}"
+					update=":mensagem :formLista:painelLIsta">
+				</p:commandButton>
+			</f:facet>
+			<p:dataTable emptyMessage="Nenhum registro encontrado."
+				paginator="true" value="#{historicoWSBean.historicos}"
+				var="historico" rows="10">
+
+				<p:column headerText="Usuário LastFM"
+					sortBy="#{historico.usuario.usrLastLg}">
+					<h:outputText value="#{historico.usuario.usrLastLg}" />
+				</p:column>
+				<p:column headerText="Artista" sortBy="#{historico.hisArtista}">
+					<h:outputText value="#{historico.hisArtista}" />
+				</p:column>
+				<p:column headerText="Música" sortBy="#{historico.hisMusica}">
+					<h:outputText value="#{historico.hisMusica}" />
+				</p:column>
+
+			</p:dataTable>
+			<f:facet name="footer">
+				<p:commandButton value="Cadastrar"
+					oncomplete="PF('wvCadastrar').show();"
+					actionListener="#{historicoWSBean.limpaInstanciaUsuario}"
+					update=":formCadastro:painelCadastro">
+				</p:commandButton>
+				<p:commandButton value="Enviar Twitter"
+					oncomplete="PF('wvLogar').show();"
+					actionListener="#{historicoWSBean.limpaInstanciaUsuario}"
+					update=":formUsuario:painelLogar">
+				</p:commandButton>
+			</f:facet>
+		</p:panel>
+	</h:form>
+	<p:dialog header="Logar" widgetVar="wvLogar" resizable="false"
+		modal="true">
+		<h:form id="formUsuario">
+			<h:panelGrid columns="2" id="painelLogar">
+				<h:outputText value="Login LastFM:" />
+				<p:inputText id="UsrLastLg" maxlength="25" size="25"
+					value="#{historicoWSBean.usuario.usrLastLg}" />
+
+				<h:outputText value="Senha LastFm:" />
+				<p:password id="UsrLastSn" maxlength="15" size="25"
+					value="#{historicoWSBean.usuario.usrLastSn}" />
+				<h:outputText value=" ou " style="center" />
+				<h:outputText value="   " />
+				<h:outputText value="Login Twitter:" />
+				<p:inputText id="UsrTwitLg" maxlength="25" size="25"
+					value="#{historicoWSBean.usuario.usrtwitLg}" />
+
+				<h:outputText value="Senha Twitter:" />
+				<p:password id="UsrTwitSn" maxlength="15"
+					value="#{historicoWSBean.usuario.usrtwitSn}" size="25" />
+			</h:panelGrid>
+
+			<h:panelGrid columns="2">
+				<p:commandButton value="Twittar"
+					actionListener="#{historicoWSBean.twittar}"
+					update=":mensagem :formUsuario:painelLogar :formLista:painelLIsta" />
+				<p:commandButton value="Fechar" oncomplete="PF('wvLogar').hide();" />
+
+			</h:panelGrid>
+		</h:form>
+	</p:dialog>
+
+	<p:dialog header="Cadastro" widgetVar="wvCadastrar" resizable="false"
+		modal="true">
+		<h:form id="formCadastro">
+			<h:panelGrid columns="2" id="painelCadastro">
+				<h:outputText value="Login LastFM:" />
+				<p:inputText id="UsrLastLgC" maxlength="25" size="25"
+					value="#{historicoWSBean.usuario.usrLastLg}" />
+
+				<h:outputText value="Senha LastFm:" />
+				<p:password id="UsrLastSnC" maxlength="15" size="25"
+					value="#{historicoWSBean.usuario.usrLastSn}" />
+
+				<h:outputText value="Login Twitter:" />
+				<p:inputText id="UsrTwitLgC" maxlength="25" size="25"
+					value="#{historicoWSBean.usuario.usrtwitLg}" />
+
+				<h:outputText value="Senha Twitter:" />
+				<p:password id="UsrTwitSnC" maxlength="15"
+					value="#{historicoWSBean.usuario.usrtwitSn}" size="25" />
+			</h:panelGrid>
+
+			<h:panelGrid columns="2">
+				<p:commandButton value="Cadastrar"
+					actionListener="#{historicoWSBean.salvar}"
+					update=":mensagem :formCadastro:painelCadastro :formLista:painelLIsta" />
+				<p:commandButton value="Fechar"
+					oncomplete="PF('wvCadastrar').hide();" />
+
+			</h:panelGrid>
+		</h:form>
+	</p:dialog>
+</h:body>
+</html>
